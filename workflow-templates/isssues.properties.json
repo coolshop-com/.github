@@ -1,0 +1,9 @@
+{
+    "name": "Auto add issues to backlog project",
+    "description": "Auto add issues to backlog project",
+    "iconName": "octicon project",
+    "categories": [
+        "Automation"
+    ],
+    "filePatterns": []
+}
