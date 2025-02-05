@@ -15,5 +15,3 @@ jobs:
         with:
           project-url: https://github.com/orgs/coolshop-com/projects/13
           github-token: ${{ secrets.ADD_TO_GITHUB_TOKEN }}
-        secrets:
-          ADD_TO_GITHUB_TOKEN: ${{ secrets.ADD_TO_GITHUB_TOKEN }}
