@@ -1,0 +1,10 @@
+name: Issues Created Workflow
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  call-workflow:
+    uses: coolshop-com/.github/workflows/issues.yaml@main
