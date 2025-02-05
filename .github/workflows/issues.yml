@@ -9,4 +9,4 @@ jobs:
   call-workflow:
     uses: coolshop-com/.github/.github/workflows/issues-auto-add-to-project.yaml@main
     secrets:
-      ADD_TO_GITHUB_TOKEN: ${{ secrets.ADD_TO_GITHUB_TOKEN }}
+      github-token: ${{ secrets.ADD_TO_GITHUB_TOKEN }}
