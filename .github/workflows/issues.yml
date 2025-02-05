@@ -7,4 +7,4 @@ on:
 
 jobs:
   call-workflow:
-    uses: coolshop-com/.github/.github/workflows/issues-auto-add-to-project.yaml@main
+    uses: coolshop-com/.github/workflows/issues-auto-add-to-project.yaml@main
