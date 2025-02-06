@@ -1,9 +1,0 @@
-{
-    "name": "Issues Created Workflow",
-    "description": "Auto add issues to backlog project and more",
-    "iconName": "octicon project",
-    "categories": [
-        "Automation"
-    ],
-    "filePatterns": []
-}
