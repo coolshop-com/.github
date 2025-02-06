@@ -1,0 +1,9 @@
+name: Issues Created Workflow
+
+on:
+  worflow_call:
+
+jobs:
+  call-workflow:
+    uses: coolshop-com/.github/workflows/issues-auto-add-to-project.yaml@main
+    secrets: inherit
