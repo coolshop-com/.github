@@ -1,0 +1,50 @@
+name: New Task
+description: New task
+title: "[Task]: "
+labels: []
+type: task
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the task
+      placeholder: What needs to be done?
+      value: "A task needs to be done!"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Backend/Frontend/Devops
+      multiple: true
+      options:
+        - label: Backend
+          value: backend
+        - label: Frontend
+          value: frontend
+        - label: Devops
+          value: devops
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: Severity
+      options:
+        - label: Minor
+          value: minor
+        - label: Major
+          value: major
+    validations:
+      required: true
+  - type: textarea
+    id: report-back-to
+    attributes:
+      label: Report back to
+      description: Report back to
+      placeholder: Who should be informed about the task when completed?
+    validations:
+      required: false
