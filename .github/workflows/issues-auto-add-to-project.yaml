@@ -2,9 +2,6 @@ name: Add issues to backlog project board
 
 on:
   workflow_call:
-    secrets:
-      ADD_TO_GITHUB_TOKEN:
-        required: true
 
 jobs:
   add-to-project:
