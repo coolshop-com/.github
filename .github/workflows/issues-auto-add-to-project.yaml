@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: actions/add-to-project@v1.0.2
         with:
-          project-url: https://github.com/orgs/coolshop-com/projects/13
           github-token: ${{ secrets.ADD_TO_GITHUB_TOKEN }}
+          project-url: https://github.com/orgs/coolshop-com/projects/13
