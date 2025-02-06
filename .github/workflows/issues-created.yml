@@ -6,5 +6,5 @@ on:
 jobs:
   call-workflow:
     name: Issues Created
-    uses: coolshop-com/.github/workflows/issues-auto-add-to-project.yaml@main
+    uses: coolshop-com/.github/.github/workflows/issues-auto-add-to-project.yaml@main
     secrets: inherit
