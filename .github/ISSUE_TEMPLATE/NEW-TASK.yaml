@@ -18,8 +18,8 @@ body:
       multiple: true
       description: Backend/Frontend
       options:
-        - label: backend
-        - label: frontend
+        - backend
+        - frontend
     validations:
       required: true
   - type: dropdown
