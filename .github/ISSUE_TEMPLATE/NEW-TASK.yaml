@@ -11,10 +11,11 @@ body:
       placeholder: What needs to be done?
     validations:
       required: true
-  - type: checkboxes
+  - type: dropdown
     id: area
     attributes:
       label: Area
+      multiple: true
       description: Backend/Frontend
       options:
         - label: backend
@@ -37,5 +38,13 @@ body:
       label: Report back to
       description: Report back to
       placeholder: Who should be informed about the task when completed?
+    validations:
+      required: false
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline
+      description: "Enter the deadline (YYYY-MM-DD)"
+      placeholder: "YYYY-MM-DD"
     validations:
       required: false
