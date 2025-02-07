@@ -10,22 +10,16 @@ body:
       label: Description
       description: Describe the task
       placeholder: What needs to be done?
-      value: "A task needs to be done!"
     validations:
       required: true
-  - type: dropdown
+  - type: checkboxes
     id: area
     attributes:
       label: Area
-      description: Backend/Frontend/Devops
-      multiple: true
+      description: Backend/Frontend
       options:
-        - label: Backend
-          value: backend
-        - label: Frontend
-          value: frontend
-        - label: Devops
-          value: devops
+        - label: backend
+        - label: frontend
     validations:
       required: true
   - type: dropdown
@@ -34,10 +28,8 @@ body:
       label: Severity
       description: Severity
       options:
-        - label: Minor
-          value: minor
-        - label: Major
-          value: major
+        - minor
+        - major
     validations:
       required: true
   - type: textarea
