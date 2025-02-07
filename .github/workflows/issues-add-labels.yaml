@@ -14,7 +14,7 @@ jobs:
         uses: stefanbuck/github-issue-parser@v3
         id: issue-parser
         with:
-          template-path: coolshop-com/.github/.github/ISSUE_TEMPLATE/NEW-TASK.yaml
+          template-path: https://github.com/orgs/coolshop-com/.github/.github/ISSUE_TEMPLATE/NEW-TASK.yaml
 
       - name: Set labels based on area field
         uses: redhat-plumbers-in-action/advanced-issue-labeler@v2
