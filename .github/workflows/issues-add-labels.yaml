@@ -8,7 +8,7 @@ jobs:
     name: Add labels to issue
     runs-on: ubuntu-latest
     permissions:
-    issues: write
+      issues: write
     steps:
       - name: Parse issue form
         uses: stefanbuck/github-issue-parser@v3
