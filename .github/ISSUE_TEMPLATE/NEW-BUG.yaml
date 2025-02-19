@@ -8,30 +8,26 @@ body:
     attributes:
       label: Description
       description: Describe the bug
-      placeholder: ""
     validations:
       required: true
 
   - type: textarea
-    id: description
+    id: steps_to_reproduce
     attributes:
       label: Steps to reproduce
       description: How can we reproduce the bug?
-      placeholder: ""
 
   - type: textarea
-    id: description
+    id: expected_behavior
     attributes:
       label: Expected behavior
       description: What was supposed to happen?
-      placeholder: ""
 
   - type: textarea
-    id: description
+    id: actual_behavior
     attributes:
       label: Actual behavior
       description: What actually happened?
-      placeholder: ""
 
   - type: textarea
     id: logs
@@ -70,7 +66,7 @@ body:
       required: true
 
   - type: textarea
-    id: report-back-to
+    id: report_back_to
     attributes:
       label: Report back to
       description: Report back to

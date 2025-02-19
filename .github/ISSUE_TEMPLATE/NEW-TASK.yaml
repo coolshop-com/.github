@@ -11,6 +11,7 @@ body:
       placeholder: What needs to be done?
     validations:
       required: true
+
   - type: dropdown
     id: area
     attributes:
@@ -22,6 +23,7 @@ body:
         - frontend
     validations:
       required: true
+
   - type: dropdown
     id: severity
     attributes:
@@ -32,14 +34,16 @@ body:
         - major
     validations:
       required: true
+
   - type: textarea
-    id: report-back-to
+    id: report_back_to
     attributes:
       label: Report back to
       description: Report back to
       placeholder: Who should be informed about the task when completed?
     validations:
       required: false
+
   - type: input
     id: deadline
     attributes:
