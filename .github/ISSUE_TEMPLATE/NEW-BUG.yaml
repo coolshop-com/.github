@@ -1,0 +1,88 @@
+name: "🐞 Bug Report"
+description: New bug
+labels: ["bug"]
+type: bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the bug
+      placeholder: ""
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the bug?
+      placeholder: ""
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Expected behavior
+      description: What was supposed to happen?
+      placeholder: ""
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+      placeholder: ""
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs & Error Messages"
+      description: "Copy and paste any relevant error messages, stack traces, or logs."
+      render: shell
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Additional Context"
+      description: "Any other relevant details that could help debug the issue."
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      description: Backend/Frontend
+      options:
+        - backend
+        - frontend
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: Severity
+      options:
+        - minor
+        - major
+    validations:
+      required: true
+
+  - type: textarea
+    id: report-back-to
+    attributes:
+      label: Report back to
+      description: Report back to
+      placeholder: Who should be informed about the task when completed?
+    validations:
+      required: false
+  
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline
+      description: "Enter the deadline (YYYY-MM-DD)"
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: false
