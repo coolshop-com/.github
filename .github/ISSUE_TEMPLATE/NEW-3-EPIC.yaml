@@ -18,7 +18,7 @@ body:
       label: Involved departments
       description: Which departments are involved in this project?
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: external_partners
@@ -26,7 +26,7 @@ body:
       label: External partners
       description: Which external partners are involved in this project?
     validations:
-      required: true
+      required: false
 
   - type: input
     id: monday_project_link
