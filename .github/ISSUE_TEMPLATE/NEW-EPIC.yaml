@@ -1,0 +1,67 @@
+name: "🚀 New Epic"
+description: New epic
+labels: []
+type: epic
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the task
+      placeholder: What needs to be done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: involved_departments
+    attributes:
+      label: Involved departments
+      description: Which departments are involved in this project?
+    validations:
+      required: true
+
+  - type: textarea
+    id: external_partners
+    attributes:
+      label: External partners
+      description: Which external partners are involved in this project?
+    validations:
+      required: true
+
+  - type: input
+    id: monday_project_link
+    attributes:
+      label: Monday project link
+      description: "Link to project in Monday"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      description: Choose one or more areas
+      options:
+        - backend
+        - frontend
+    validations:
+      required: true
+
+  - type: textarea
+    id: report_back_to
+    attributes:
+      label: Report back to
+      description: Report back to
+      placeholder: Who should be informed about the task when completed?
+    validations:
+      required: false
+
+  - type: input
+    id: deadline
+    attributes:
+      label: Deadline
+      description: "Enter the deadline (YYYY-MM-DD)"
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: false
