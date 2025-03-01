@@ -28,6 +28,14 @@ body:
     validations:
       required: false
 
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks
+      description: Which risks or open questions are there?
+    validations:
+      required: false
+
   - type: input
     id: monday_project_link
     attributes:
