@@ -44,6 +44,14 @@ body:
     validations:
       required: false
 
+  - type: textarea
+    id: additional_info_from_monday
+    attributes:
+      label: Additional information from Monday
+      description: Value and scope
+    validations:
+      required: false
+
   - type: dropdown
     id: area
     attributes:
