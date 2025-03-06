@@ -1,5 +1,5 @@
-name: "📝 New Task"
-description: New task
+name: "📝 Task"
+description: Create a new task for a specific piece of work
 labels: []
 type: task
 body:
@@ -21,17 +21,6 @@ body:
       options:
         - backend
         - frontend
-    validations:
-      required: true
-
-  - type: dropdown
-    id: severity
-    attributes:
-      label: Severity
-      description: Severity
-      options:
-        - minor
-        - major
     validations:
       required: true
 

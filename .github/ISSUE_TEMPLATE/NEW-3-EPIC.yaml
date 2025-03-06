@@ -1,5 +1,5 @@
-name: "🚀 New Epic"
-description: New epic
+name: "🚀 Epic"
+description: Create a new epic for a collection of tasks related to a single project
 labels: []
 type: epic
 body:
