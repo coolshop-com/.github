@@ -1,5 +1,5 @@
-name: "🐞 Bug Report"
-description: New bug
+name: "🐞 Bug"
+description: Create a new bug report for an unexpected problem or behavior
 labels: ["bug"]
 type: bug
 body:
@@ -7,40 +7,9 @@ body:
     id: description
     attributes:
       label: Description
-      description: Describe the bug
+      description: Describe the bug. Expected behavior and actual behavior. Steps to reproduce.
     validations:
       required: true
-
-  - type: textarea
-    id: steps_to_reproduce
-    attributes:
-      label: Steps to reproduce
-      description: How can we reproduce the bug?
-
-  - type: textarea
-    id: expected_behavior
-    attributes:
-      label: Expected behavior
-      description: What was supposed to happen?
-
-  - type: textarea
-    id: actual_behavior
-    attributes:
-      label: Actual behavior
-      description: What actually happened?
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: "Logs & Error Messages"
-      description: "Copy and paste any relevant error messages, stack traces, or logs."
-      render: shell
-
-  - type: textarea
-    id: additional_context
-    attributes:
-      label: "Additional Context"
-      description: "Any other relevant details that could help debug the issue."
 
   - type: dropdown
     id: area
@@ -51,17 +20,6 @@ body:
       options:
         - backend
         - frontend
-    validations:
-      required: true
-
-  - type: dropdown
-    id: severity
-    attributes:
-      label: Severity
-      description: Severity
-      options:
-        - minor
-        - major
     validations:
       required: true
 
