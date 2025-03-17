@@ -15,6 +15,12 @@ Here you can describe your changes made in this PR.
 Please elaborate on how the code is tested.
 -->
 
+### Should anything be documented in Tech Wiki?
+- [ ] Yes - already done
+- [ ] Yes - will do
+- [ ] No
+
+
 ### Todos
 
 <!-- Comment:
