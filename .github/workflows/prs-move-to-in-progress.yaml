@@ -16,14 +16,20 @@ jobs:
           OWNER=${{ github.repository_owner }}
           REPO=${{ github.repository }}
 
-          ISSUE_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          # Hent GitHub timeline events for PR
+          RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/timeline" |
-            jq -r '[.[] | select(.event == "cross-referenced") | .source.issue.number] | first // empty')
+            "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/timeline")
+
+          # Debugging: Print response for at se JSON-struktur
+          echo "GitHub API Response: $RESPONSE"
+
+          # Parse JSON, men kun hvis det er en liste
+          ISSUE_NUMBER=$(echo "$RESPONSE" | jq -r 'if type == "array" then [.[] | select(.event == "cross-referenced") | .source.issue.number] | first // empty else empty end')
 
           if [[ -n "$ISSUE_NUMBER" ]]; then
             echo "Issue found: $ISSUE_NUMBER"
-            echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+            echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> "$GITHUB_ENV"
           else
             echo "No linked issue found."
           fi
