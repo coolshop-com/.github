@@ -13,13 +13,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=$(jq -r '.pull_request.number' < $GITHUB_EVENT_PATH)
-          OWNER=${{ github.repository_owner }}
           REPO=${{ github.repository }}
 
           # Hent GitHub timeline events for PR
           RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/timeline")
+            "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/timeline")
 
           # Debugging: Print response for at se JSON-struktur
           echo "GitHub API Response: $RESPONSE"
