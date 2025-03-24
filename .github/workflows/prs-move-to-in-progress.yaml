@@ -10,7 +10,7 @@ jobs:
       - name: Find linked issue number
         id: extract_issue
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
         run: |
           PR_NUMBER=$(jq -r '.pull_request.number' < $GITHUB_EVENT_PATH)
           REPO=${{ github.repository }}
