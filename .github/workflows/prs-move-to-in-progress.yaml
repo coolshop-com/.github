@@ -15,16 +15,37 @@ jobs:
           PR_NUMBER=$(jq -r '.pull_request.number' < $GITHUB_EVENT_PATH)
           REPO=${{ github.repository }}
 
-          # Hent GitHub timeline events for PR
-          RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/timeline")
+          # Define GraphQL query
+          QUERY='
+          {
+            repository(owner: "'"${REPO%%/*}"'", name: "'"${REPO#*/}"'") {
+              pullRequest(number: '"$PR_NUMBER"') {
+                timelineItems(first: 100) {
+                  nodes {
+                    ... on CrossReferencedEvent {
+                      source {
+                        ... on Issue {
+                          number
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }'
 
-          # Debugging: Print response for at se JSON-struktur
-          echo "GitHub API Response: $RESPONSE"
+          # Execute the GraphQL query
+          RESPONSE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST -d "{\"query\": \"$QUERY\"}" \
+            https://api.github.com/graphql)
 
-          # Parse JSON, men kun hvis det er en liste
-          ISSUE_NUMBER=$(echo "$RESPONSE" | jq -r 'if type == "array" then [.[] | select(.event == "cross-referenced") | .source.issue.number] | first // empty else empty end')
+          # Debugging: Print response to see the JSON structure
+          echo "GitHub GraphQL Response: $RESPONSE"
+
+          # Extract issue number from response
+          ISSUE_NUMBER=$(echo "$RESPONSE" | jq -r '.data.repository.pullRequest.timelineItems.nodes[] | select(.source != null) | .source.number' | head -n 1)
 
           if [[ -n "$ISSUE_NUMBER" ]]; then
             echo "Issue found: $ISSUE_NUMBER"
