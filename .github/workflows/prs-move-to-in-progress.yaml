@@ -6,64 +6,40 @@ on:
 jobs:
   move-issue-to-in-review:
     runs-on: ubuntu-latest
+
     steps:
       - name: Find linked issue number
         id: extract_issue
         env:
           GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
         run: |
-          PR_NUMBER=$(jq -r '.pull_request.number' < $GITHUB_EVENT_PATH)
+          PR_URL=$(jq -r '.pull_request.html_url' < $GITHUB_EVENT_PATH)
           REPO=${{ github.repository }}
+          PR_NUMBER=${{ github.event.number }}
+          echo "PR Number: $PR_NUMBER"
 
-          # Define GraphQL query
-          QUERY='
-          {
-            repository(owner: "'"${REPO%%/*}"'", name: "'"${REPO#*/}"'") {
-              pullRequest(number: '"$PR_NUMBER"') {
-                timelineItems(first: 100) {
-                  nodes {
-                    ... on CrossReferencedEvent {
-                      source {
-                        ... on Issue {
-                          number
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }'
-          # Debugging: Print query to see the GraphQL structure
-          echo "GitHub GraphQL Query: $QUERY"
+          # Fetch linked issues using GitHub REST API
+          LINKED_ISSUE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER} | \
+            jq -r '.body | match("fixes #[0-9]+") | .string')
 
-          # Execute the GraphQL query
-          RESPONSE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Content-Type: application/json" \
-            -X POST -d "{\"query\": \"$QUERY\"}" \
-            https://api.github.com/graphql)
-
-          # Debugging: Print response to see the JSON structure
-          echo "GitHub GraphQL Response: $RESPONSE"
-
-          # Extract issue number from response
-          ISSUE_NUMBER=$(echo "$RESPONSE" | jq -r '.data.repository.pullRequest.timelineItems.nodes[] | select(.source != null) | .source.number' | head -n 1)
-
-          if [[ -n "$ISSUE_NUMBER" ]]; then
-            echo "Issue found: $ISSUE_NUMBER"
+          if [[ -n "$LINKED_ISSUE" ]]; then
+            ISSUE_NUMBER=$(echo "$LINKED_ISSUE" | grep -oP '\d+')
+            echo "Linked issue found: #$ISSUE_NUMBER"
             echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> "$GITHUB_ENV"
           else
             echo "No linked issue found."
+            exit 1
           fi
 
-      - name: Move issue in GitHub Project Beta
+      - name: Move issue to '👀 In review' column in GitHub Project
         if: env.ISSUE_NUMBER != ''
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const projectId = "13";
-            const columnName = "👀 In review";
+            const columnName = "👀 In review";  // Column to move issue to
             const issueNumber = process.env.ISSUE_NUMBER;
 
             if (!issueNumber) {
@@ -71,7 +47,7 @@ jobs:
               return;
             }
 
-            // Find issue node ID
+            // Fetch the issue ID by issue number
             const { repository } = await github.graphql(`
               query($owner: String!, $repo: String!, $issue: Int!) {
                 repository(owner: $owner, name: $repo) {
@@ -92,7 +68,7 @@ jobs:
             }
             const issueId = repository.issue.id;
 
-            // Find field ID for "Status"
+            // Fetch the project and find the "Status" field
             const { node } = await github.graphql(`
               query($projectId: ID!) {
                 node(id: $projectId) {
@@ -114,7 +90,7 @@ jobs:
               return;
             }
 
-            // Find option ID for "👀 In review"
+            // Find the "👀 In review" option in the Status field
             const { node: statusFieldData } = await github.graphql(`
               query($fieldId: ID!) {
                 node(id: $fieldId) {
@@ -134,7 +110,7 @@ jobs:
               return;
             }
 
-            // Update issue status to "👀 In review"
+            // Move the issue to "👀 In review"
             await github.graphql(`
               mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: ID!) {
                 updateProjectV2ItemFieldValue(
