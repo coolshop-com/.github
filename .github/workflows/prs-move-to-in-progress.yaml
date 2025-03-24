@@ -34,6 +34,8 @@ jobs:
               }
             }
           }'
+          # Debugging: Print query to see the GraphQL structure
+          echo "GitHub GraphQL Query: $QUERY"
 
           # Execute the GraphQL query
           RESPONSE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
