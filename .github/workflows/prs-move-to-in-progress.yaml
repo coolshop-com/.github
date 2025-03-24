@@ -1,11 +1,10 @@
-name: Move Issue to 🏗 In progress on Linked PR
+name: Move Issue to 👀 In review on Linked PR
 
 on:
-  pull_request:
-    types: [opened, reopened, ready_for_review]
+  workflow_call:
 
 jobs:
-  move-issue:
+  move-issue-to-in-review:
     runs-on: ubuntu-latest
     steps:
       - name: Find linked issue number
@@ -27,7 +26,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const projectId = "13";
-            const columnName = "🏗 In progress";
+            const columnName = "👀 In review";
 
             const issueNumber = process.env.ISSUE_NUMBER;
             if (!issueNumber) {
@@ -78,7 +77,7 @@ jobs:
               return;
             }
 
-            // Find option ID for "🏗 In progress"
+            // Find option ID for "👀 In review"
             const { node: statusFieldData } = await github.graphql(`
               query($fieldId: ID!) {
                 node(id: $fieldId) {
@@ -92,13 +91,13 @@ jobs:
               }
             `, { fieldId: statusField.id });
 
-            const inProgressOption = statusFieldData.options.find(option => option.name === columnName);
-            if (!inProgressOption) {
+            const inReviewOption = statusFieldData.options.find(option => option.name === columnName);
+            if (!inReviewOption) {
               console.log(`Column "${columnName}" not found.`);
               return;
             }
 
-            // Update issue status to "🏗 In progress"
+            // Update issue status to "👀 In review"
             await github.graphql(`
               mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: ID!) {
                 updateProjectV2ItemFieldValue(
@@ -116,7 +115,7 @@ jobs:
               projectId,
               itemId: issueId,
               fieldId: statusField.id,
-              optionId: inProgressOption.id
+              optionId: inReviewOption.id
             });
 
             console.log(`Issue #${issueNumber} moved to "${columnName}"`);
