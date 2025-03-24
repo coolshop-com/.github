@@ -1,0 +1,122 @@
+name: Move Issue to 🏗 In progress on Linked PR
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+jobs:
+  move-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find linked issue number
+        id: extract_issue
+        run: |
+          ISSUE_URL=$(jq -r '.pull_request.body' < $GITHUB_EVENT_PATH | grep -o 'https://github.com/.*/issues/[0-9]*' || echo "")
+          if [[ -n "$ISSUE_URL" ]]; then
+            ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -o '[0-9]*$')
+            echo "Issue found: $ISSUE_NUMBER"
+            echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+          else
+            echo "No issue found in PR description."
+          fi
+
+      - name: Move issue in GitHub Project Beta
+        if: env.ISSUE_NUMBER != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const projectId = "13";
+            const columnName = "🏗 In progress";
+
+            const issueNumber = process.env.ISSUE_NUMBER;
+            if (!issueNumber) {
+              console.log("No issue number found.");
+              return;
+            }
+
+            // Find issue node ID
+            const { repository } = await github.graphql(`
+              query($owner: String!, $repo: String!, $issue: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $issue) {
+                    id
+                  }
+                }
+              }
+            `, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue: parseInt(issueNumber)
+            });
+
+            if (!repository.issue) {
+              console.log("Issue not found.");
+              return;
+            }
+            const issueId = repository.issue.id;
+
+            // Find field ID for "Status"
+            const { node } = await github.graphql(`
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    fields(first: 20) {
+                      nodes {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId });
+
+            const statusField = node.fields.nodes.find(field => field.name === "Status");
+            if (!statusField) {
+              console.log("Status field not found.");
+              return;
+            }
+
+            // Find option ID for "🏗 In progress"
+            const { node: statusFieldData } = await github.graphql(`
+              query($fieldId: ID!) {
+                node(id: $fieldId) {
+                  ... on ProjectV2Field {
+                    options {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            `, { fieldId: statusField.id });
+
+            const inProgressOption = statusFieldData.options.find(option => option.name === columnName);
+            if (!inProgressOption) {
+              console.log(`Column "${columnName}" not found.`);
+              return;
+            }
+
+            // Update issue status to "🏗 In progress"
+            await github.graphql(`
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: ID!) {
+                updateProjectV2ItemFieldValue(
+                  input: {
+                    projectId: $projectId,
+                    itemId: $itemId,
+                    fieldId: $fieldId,
+                    value: { singleSelectOptionId: $optionId }
+                  }
+                ) {
+                  clientMutationId
+                }
+              }
+            `, {
+              projectId,
+              itemId: issueId,
+              fieldId: statusField.id,
+              optionId: inProgressOption.id
+            });
+
+            console.log(`Issue #${issueNumber} moved to "${columnName}"`);

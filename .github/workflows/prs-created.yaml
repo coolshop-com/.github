@@ -1,0 +1,10 @@
+name: Pull Requests Created Workflow
+
+on:
+  workflow_call:
+
+jobs:
+  call-workflow-move-to-in-progress:
+    name: Move issue to in progress when PR is created
+    uses: coolshop-com/.github/.github/workflows/prs-move-to-in-progress.yaml@main
+    secrets: inherit
