@@ -13,18 +13,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
         run: |
-          PR_URL=$(jq -r '.pull_request.html_url' < $GITHUB_EVENT_PATH)
-          REPO=${{ github.repository }}
+          echo "github: ${{ github }}"
           PR_NUMBER=${{ github.event.number }}
-          echo "PR Number: $PR_NUMBER"
+          REPO_OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1)
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
 
-          # Fetch linked issues using GitHub REST API
-          LINKED_ISSUE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/${REPO}/pulls/${PR_NUMBER} | \
-            jq -r '.body | match("fixes #[0-9]+") | .string')
+          echo "Fetching linked issues for PR #$PR_NUMBER in $REPO_OWNER/$REPO_NAME"
 
-          if [[ -n "$LINKED_ISSUE" ]]; then
-            ISSUE_NUMBER=$(echo "$LINKED_ISSUE" | grep -oP '\d+')
+          QUERY='{ "query": "query { repository(owner: \"'$REPO_OWNER'\", name: \"'$REPO_NAME'\") { pullRequest(number: '$PR_NUMBER') { closingIssuesReferences(first: 100) { edges { node { id title url } } } } } }" }'
+
+          RESPONSE=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" --data "$QUERY" https://api.github.com/graphql)
+
+          ISSUE_NUMBER=$(echo "$RESPONSE" | jq -r '.data.repository.pullRequest.closingIssuesReferences.edges[0].node.url' | grep -oE '[0-9]+$')
+
+          if [[ -n "$ISSUE_NUMBER" ]]; then
             echo "Linked issue found: #$ISSUE_NUMBER"
             echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> "$GITHUB_ENV"
           else
