@@ -133,26 +133,34 @@ def get_issue_item_id_in_project(project_id, issue_id):
 
 def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
     query = """
-        mutation($projectId: "%s", $itemId: "%s", $fieldId: "%s", $optionId: "%s") {
+        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
             updateProjectV2ItemFieldValue(
                 input: {
-                projectId: $projectId
-                itemId: $itemId
-                fieldId: $fieldId
-                value: { singleSelectOptionId: $optionId }
+                    projectId: $projectId
+                    itemId: $itemId
+                    fieldId: $fieldId
+                    value: { singleSelectOptionId: $optionId }
                 }
             ) {
                 clientMutationId
             }
         }
-        }""" % (project_id, issue_id, field_id, option_id)
-    
+    """
     print("query")
     print(query)
 
-    response = requests.post(GITHUB_API_URL, json={"query": query}, headers=HEADERS)
-    return response.json()["data"]["node"]["fields"]["nodes"]
+    variables = {
+        "projectId": project_id,
+        "itemId": issue_id,
+        "fieldId": field_id,
+        "optionId": str(option_id)  # Sikrer at option_id er en streng
+    }
 
+    response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
+
+    print("response: ", response)
+    print("response.json: ", response.json())
+    return response.json()["data"]["node"]["fields"]["nodes"]
 
 def main():
     print(f"Fetching linked issues for PR #{PR_NUMBER} in {REPO_OWNER}/{REPO_NAME}")
