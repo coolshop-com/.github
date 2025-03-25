@@ -133,17 +133,18 @@ def get_issue_item_id_in_project(project_id, issue_id):
 
 def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
     query = """
-              mutation($projectId: "%s", $itemId: "%s", $fieldId: "%s", $optionId: "%s") {
-                updateProjectV2ItemFieldValue(
-                  input: {
-                    projectId: "%s",
-                    itemId: "%s",
-                    fieldId: "%s",
-                    value: { singleSelectOptionId: "%s" }
-                  }
-                ) {
-                  clientMutationId
+        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+            updateProjectV2ItemFieldValue(
+                input: {
+                projectId: $projectId
+                itemId: $itemId
+                fieldId: $fieldId
+                value: { singleSelectOptionId: $optionId }
                 }
+            ) {
+                clientMutationId
+            }
+        }
         }""" % (project_id, issue_id, field_id, option_id, project_id, issue_id, field_id, option_id)
     
     print("query")
