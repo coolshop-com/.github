@@ -146,21 +146,17 @@ def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
             }
         }
     """
-    print("query")
-    print(query)
 
     variables = {
         "projectId": project_id,
         "itemId": issue_id,
         "fieldId": field_id,
-        "optionId": str(option_id)  # Sikrer at option_id er en streng
+        "optionId": str(option_id)
     }
 
     response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
 
-    print("response: ", response)
-    print("response.json: ", response.json())
-    return response.json()["data"]["node"]["fields"]["nodes"]
+    return response.json()
 
 def main():
     print(f"Fetching linked issues for PR #{PR_NUMBER} in {REPO_OWNER}/{REPO_NAME}")
