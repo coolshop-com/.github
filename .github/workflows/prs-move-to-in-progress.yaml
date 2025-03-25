@@ -104,10 +104,8 @@ jobs:
               query($fieldId: ID!) {
                 node(id: $fieldId) {
                   ... on ProjectV2Field {
-                    options {
-                      id
-                      name
-                    }
+                    id
+                    name
                   }
                 }
               }
