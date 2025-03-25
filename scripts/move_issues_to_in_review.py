@@ -175,7 +175,7 @@ def main():
     print("Issue ID in project: ", issue_id_in_project)
 
     print("Moving issue to 'In review'...")
-    move_issue_to_in_review(BACKLOG_PROJECT_ID, issue_number, project_status_field["id"], in_progress_option_id)
+    move_issue_to_in_review(BACKLOG_PROJECT_ID, issue_id_in_project, project_status_field["id"], in_progress_option_id)
 
     print(f"Issue {issue_number} moved to status 'In review'.")
 
