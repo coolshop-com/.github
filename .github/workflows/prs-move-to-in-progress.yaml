@@ -40,7 +40,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const projectId = "13";
+            const projectId = "PVT_kwDOANPumc4APBrR";
             const columnName = "👀 In review";  // Column to move issue to
             const issueNumber = process.env.ISSUE_NUMBER;
 
