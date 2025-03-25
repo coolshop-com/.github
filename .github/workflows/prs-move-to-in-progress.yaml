@@ -16,4 +16,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_PR_NUMBER: ${{ github.event.number }}
-        run: python scripts/move_issue_to_in_review.py
+        run: python coolshop-com/.github/.github/scripts/move_issue_to_in_review.py
