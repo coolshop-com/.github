@@ -145,7 +145,7 @@ def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
                 clientMutationId
             }
         }
-        }""" % (project_id, issue_id, field_id, option_id, project_id, issue_id, field_id, option_id)
+        }""" % (project_id, issue_id, field_id, option_id)
     
     print("query")
     print(query)
