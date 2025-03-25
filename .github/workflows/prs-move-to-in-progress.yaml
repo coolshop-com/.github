@@ -70,6 +70,8 @@ jobs:
             }
             const issueId = repository.issue.id;
 
+            encho "issueId: $issueId"
+
             // Fetch the project and find the "Status" field
             const { node } = await github.graphql(`
               query($projectId: ID!) {
@@ -77,8 +79,14 @@ jobs:
                   ... on ProjectV2 {
                     fields(first: 20) {
                       nodes {
-                        id
-                        name
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options {
+                            id
+                            name
+                          }
+                        }
                       }
                     }
                   }
