@@ -39,7 +39,7 @@ jobs:
         if: env.ISSUE_NUMBER != ''
         uses: actions/github-script@v7
         with:
-          github-token: ${{ GITHUB_TOKEN }}
+          github-token: ${{ env.GITHUB_TOKEN }}
           script: |
             const projectId = "PVT_kwDOANPumc4APBrR";
             const columnName = "👀 In review";  // Column to move issue to
