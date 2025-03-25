@@ -70,7 +70,7 @@ jobs:
             }
             const issueId = repository.issue.id;
 
-            encho "issueId: $issueId"
+            echo "issueId: $issueId"
 
             // Fetch the project and find the "Status" field
             const { node } = await github.graphql(`
@@ -141,4 +141,4 @@ jobs:
               optionId: inReviewOption.id
             });
 
-            console.log(`Issue #${issueNumber} moved to "${columnName}"`);
+            echo "Issue #${issueNumber} moved to "${columnName}" column."
