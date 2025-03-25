@@ -16,5 +16,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_PR_NUMBER: ${{ github.event.number }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
         run: python scripts/move_issue_to_in_review.py
