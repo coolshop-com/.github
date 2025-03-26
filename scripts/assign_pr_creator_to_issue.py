@@ -7,7 +7,7 @@ HEADERS = {
     "Accept": "application/vnd.github.v3+json"
 }
 
-GITHUB_API_URL = "https://api.github.com"
+GITHUB_API_URL = "https://api.github.com/graphql"
 PR_NUMBER = os.getenv("GITHUB_PR_NUMBER")
 REPO_OWNER, REPO_NAME = os.getenv("GITHUB_REPOSITORY").split("/")
 PR_AUTHOR = os.getenv("GITHUB_PR_AUTHOR")
