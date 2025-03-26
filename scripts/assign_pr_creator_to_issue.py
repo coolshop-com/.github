@@ -87,7 +87,7 @@ def assign_pr_author_to_issue(issue_id, user_id):
         }
     """
     print("query: ", mutation)
-    mutation_variables = {"owner": REPO_OWNER, "name": REPO_NAME, "issueId": issue_id, "assignee": user_id}
+    mutation_variables = {"owner": REPO_OWNER, "name": REPO_NAME, "issueId": issue_id, "assigneeId": user_id}
     print("variables: ", mutation_variables)
     return requests.post(GITHUB_API_URL, json={"query": mutation, "variables": mutation_variables}, headers=HEADERS)
 
