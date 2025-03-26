@@ -8,3 +8,8 @@ jobs:
     name: Move issue to in progress when PR is created
     uses: coolshop-com/.github/.github/workflows/prs-move-to-in-progress.yaml@main
     secrets: inherit
+
+  call-workflow-assign-pr-creator-to-issue:
+    name: Assign PR Author to Linked Issues
+    uses: coolshop-com/.github/.github/workflows/prs-assign-pr-creator-to-issue.yaml@main
+    secrets: inherit

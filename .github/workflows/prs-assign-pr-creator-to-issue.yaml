@@ -1,0 +1,19 @@
+name: Assign PR Author to Linked Issues
+
+on:
+  workflow_call:
+
+jobs:
+  assign-author:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign PR Author to Linked Issues
+        env: 
+          GITHUB_TOKEN: ${{ secrets.ISSUES_AND_PRS_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
+          GITHUB_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          curl -o /tmp/assign_pr_creator_to_issue.py https://raw.githubusercontent.com/coolshop-com/.github/refs/heads/main/scripts/assign_pr_creator_to_issue.py
+          python /tmp/assign_pr_creator_to_issue.py
