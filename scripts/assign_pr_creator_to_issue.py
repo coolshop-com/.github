@@ -37,16 +37,11 @@ def get_issues_from_pr():
         "name": REPO_NAME,
         "number": int(PR_NUMBER)
     }
-
-    print("query", query)
-    print("variables", variables)
-
     response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
-    print("response", response.json())
     return response.json()["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["edges"]
 
 
-def assignees_on_issue(issue_number):
+def get_assignees_on_issue(issue_number):
     query = """
         query ($owner: String!, $name: String!, $issueNumber: Int!) {
             repository(owner: $owner, name: $name) {
@@ -108,7 +103,7 @@ def main():
         issue_id = linked_issue["node"]["id"]
         issue_number = linked_issue["node"]["number"]
 
-        assignees_on_issue = assignees_on_issue(issue_number)
+        assignees_on_issue = get_assignees_on_issue(issue_number)
         if assignees_on_issue:
             print(f"🔍 Issue #{issue_number} already has an assignee, skipping.")
             return
