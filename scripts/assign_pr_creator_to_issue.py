@@ -86,7 +86,9 @@ def assign_pr_author_to_issue(issue_id, user_id):
             }
         }
     """
+    print("query: ", mutation)
     mutation_variables = {"owner": REPO_OWNER, "name": REPO_NAME, "issueId": issue_id, "assignee": user_id}
+    print("variables: ", mutation_variables)
     return requests.post(GITHUB_API_URL, json={"query": mutation, "variables": mutation_variables}, headers=HEADERS)
 
 def main():
@@ -110,6 +112,8 @@ def main():
         user_id = get_user_id(PR_AUTHOR)
 
         response = assign_pr_author_to_issue(issue_id, user_id)
+
+        print("response: ", response.json())
 
         if response.status_code == 200:
             print(f"✅ Assigned {PR_AUTHOR} to issue #{issue_number}")
