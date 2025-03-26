@@ -76,19 +76,18 @@ def get_user_id(username):
 
 def assign_pr_author_to_issue(issue_id, user_id):
     mutation = """
-    mutation ($owner: String!, $name: String!, $issueId: ID!, $assignee: String!) {
-        addAssigneesToAssignable(input: {assignableId: $issueId, assigneeIds: [$assignee]}) {
-            assignable {
-                ... on Issue {
-                    number
+        mutation ($issueId: ID!, $assigneeId: ID!) {
+            addAssigneesToAssignable(input: {assignableId: $issueId, assigneeIds: [$assigneeId]}) {
+                assignable {
+                    ... on Issue {
+                        number
+                    }
                 }
             }
         }
-    }
     """
     mutation_variables = {"owner": REPO_OWNER, "name": REPO_NAME, "issueId": issue_id, "assignee": user_id}
     return requests.post(GITHUB_API_URL, json={"query": mutation, "variables": mutation_variables}, headers=HEADERS)
-    
 
 def main():
     print(f"🔍 Checking linked issues for PR #{PR_NUMBER}")
