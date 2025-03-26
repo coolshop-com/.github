@@ -37,6 +37,10 @@ def get_issues_from_pr():
         "name": REPO_NAME,
         "number": int(PR_NUMBER)
     }
+
+    print("query", query)
+    print("variables", variables)
+
     response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
     return response.json()["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["edges"]
 
