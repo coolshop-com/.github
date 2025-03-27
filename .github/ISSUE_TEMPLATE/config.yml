@@ -1,1 +1,5 @@
 blank_issues_enabled: false
+contact_links:
+  - name: How we work with issues at Coolshop
+    url: https://tech.coolshop.com/en/development/working-with-github-issues-and-projects
+    about: Guidelines for creating and managing GitHub issues at Coolshop, including best practices, workflows, and project organization.
