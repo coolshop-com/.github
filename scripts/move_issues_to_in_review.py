@@ -16,7 +16,7 @@ PR_NUMBER = os.getenv("GITHUB_PR_NUMBER")
 REPO_OWNER = os.getenv("GITHUB_REPOSITORY").split("/")[0]
 REPO_NAME = os.getenv("GITHUB_REPOSITORY").split("/")[1]
 
-def get_issue_number_from_pr():
+def get_issues_from_pr():
     query = """
         query {
             repository(owner: "%s", name: "%s") {
@@ -35,7 +35,7 @@ def get_issue_number_from_pr():
         }
     """ % (REPO_OWNER, REPO_NAME, int(PR_NUMBER))
     response = requests.post(GITHUB_API_URL, json={"query": query}, headers=HEADERS)
-    return response.json()["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["edges"][0]["node"]["id"]
+    return response.json()["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["edges"]
 
 def get_project_fields(project_node_id):
     query = """
@@ -161,11 +161,11 @@ def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
 def main():
     print(f"Fetching linked issues for PR #{PR_NUMBER} in {REPO_OWNER}/{REPO_NAME}")
 
-    issue_number = get_issue_number_from_pr()
-    if not issue_number:
-        print("No linked issue found.")
+    linked_issues = get_issues_from_pr()
+    if not linked_issues:
+        print("No linked issues found.")
         return
-    print(f"Linked issue: {issue_number}")
+    print(f"Linked issues: {linked_issues}")
 
     print("Finding project status field...")
     project_status_field = get_status_field(BACKLOG_PROJECT_ID)
@@ -173,16 +173,24 @@ def main():
         print("Status field not found.")
         return
     print(f"Status field: {project_status_field}")
-    
+
     in_progress_option_id = get_in_progress_option_id(project_status_field)
 
-    issue_id_in_project = get_issue_item_id_in_project(BACKLOG_PROJECT_ID, issue_number)
-    print("Issue ID in project: ", issue_id_in_project)
+    for linked_issue in linked_issues:
+        issue_id = linked_issue["node"]["id"]
+        issue_number = linked_issue["node"]["number"]
 
-    print("Moving issue to 'In review'...")
-    move_issue_to_in_review(BACKLOG_PROJECT_ID, issue_id_in_project, project_status_field["id"], in_progress_option_id)
+        issue_id_in_project = get_issue_item_id_in_project(BACKLOG_PROJECT_ID, issue_id)
 
-    print(f"Issue {issue_number} moved to status 'In review'.")
+        print("Moving issue to 'In review'...")
+        response = move_issue_to_in_review(BACKLOG_PROJECT_ID, issue_id_in_project, project_status_field["id"], in_progress_option_id)
+
+        print(f"Issue {issue_number} moved to status 'In review'.")
+
+        if response.status_code == 200:
+            print(f"✅ Issue {issue_number} moved to status 'In review'.")
+        else:
+            print(f"❌ Issue {issue_number} could not be moved to status 'In review': {response.text}")
 
 if __name__ == "__main__":
     main()

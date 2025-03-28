@@ -113,8 +113,6 @@ def main():
 
         response = assign_pr_author_to_issue(issue_id, user_id)
 
-        print("response: ", response.json())
-
         if response.status_code == 200:
             print(f"✅ Assigned {PR_AUTHOR} to issue #{issue_number}")
         else:
