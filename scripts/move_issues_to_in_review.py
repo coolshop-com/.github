@@ -160,9 +160,7 @@ def move_issue_to_in_review(project_id, issue_id, field_id, option_id):
         "optionId": str(option_id)
     }
 
-    response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
-
-    return response.json()
+    return requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
 
 def main():
     print(f"Fetching linked issues for PR #{PR_NUMBER} in {REPO_OWNER}/{REPO_NAME}")
