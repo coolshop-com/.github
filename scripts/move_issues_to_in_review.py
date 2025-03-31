@@ -18,13 +18,14 @@ REPO_NAME = os.getenv("GITHUB_REPOSITORY").split("/")[1]
 
 def get_issues_from_pr():
     query = """
-        query {
-            repository(owner: "%s", name: "%s") {
-                pullRequest(number: %d) {
+        query ($owner: String!, $name: String!, $number: Int!){
+            repository(owner: $owner, name: $name) {
+                pullRequest(number: $number) {
                     closingIssuesReferences(first: 100) {
                         edges {
                             node {
                                 id
+                                number
                                 title
                                 url
                             }
@@ -33,8 +34,13 @@ def get_issues_from_pr():
                 }
             }
         }
-    """ % (REPO_OWNER, REPO_NAME, int(PR_NUMBER))
-    response = requests.post(GITHUB_API_URL, json={"query": query}, headers=HEADERS)
+    """
+    variables = {
+        "owner": REPO_OWNER,
+        "name": REPO_NAME,
+        "number": int(PR_NUMBER)
+    }
+    response = requests.post(GITHUB_API_URL, json={"query": query, "variables": variables}, headers=HEADERS)
     return response.json()["data"]["repository"]["pullRequest"]["closingIssuesReferences"]["edges"]
 
 def get_project_fields(project_node_id):
@@ -167,18 +173,18 @@ def main():
         return
     print(f"Linked issues: {linked_issues}")
 
-    print("Finding project status field...")
-    project_status_field = get_status_field(BACKLOG_PROJECT_ID)
-    if not project_status_field:
-        print("Status field not found.")
-        return
-    print(f"Status field: {project_status_field}")
-
-    in_progress_option_id = get_in_progress_option_id(project_status_field)
-
     for linked_issue in linked_issues:
         issue_id = linked_issue["node"]["id"]
         issue_number = linked_issue["node"]["number"]
+
+        print("Finding project status field...")
+        project_status_field = get_status_field(BACKLOG_PROJECT_ID)
+        if not project_status_field:
+            print("Status field not found.")
+            return
+        print(f"Status field: {project_status_field}")
+        
+        in_progress_option_id = get_in_progress_option_id(project_status_field)
 
         issue_id_in_project = get_issue_item_id_in_project(BACKLOG_PROJECT_ID, issue_id)
 
