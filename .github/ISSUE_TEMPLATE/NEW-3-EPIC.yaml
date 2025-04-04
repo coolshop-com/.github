@@ -73,6 +73,14 @@ body:
     validations:
       required: false
 
+  - type: textarea
+    id: project_lead
+    attributes:
+      label: Project lead
+      description: The responsible developer for this project
+    validations:
+      required: false
+
   - type: input
     id: deadline
     attributes:
