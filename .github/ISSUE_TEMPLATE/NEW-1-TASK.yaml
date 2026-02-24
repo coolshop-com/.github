@@ -12,6 +12,14 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: has-user-impact
+    attributes:
+      label: Does this has user impact?
+      description: Check this if solving this issues gives user impact
+      options:
+        - label: Has user impact
+
   - type: dropdown
     id: area
     attributes:
