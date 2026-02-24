@@ -15,10 +15,10 @@ body:
   - type: checkboxes
     id: has-user-impact
     attributes:
-      label: User-facing change
+      label: User impact
       description: Check this if the change affects something a user can see, interact with, or notice — even indirectly (e.g. performance improvements, error messages, new buttons, changed behaviour).
       options:
-        - label: User-facing change
+        - label: This change has user-facing impact
 
   - type: dropdown
     id: area
